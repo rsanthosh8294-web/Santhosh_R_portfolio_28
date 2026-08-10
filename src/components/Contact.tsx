@@ -3,6 +3,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import { soundFx } from '../utils/audio';
 import confetti from 'canvas-confetti';
 import { CopyButton } from './CopyButton';
+import { HeaderScrollingLine } from './HeaderScrollingLine';
 import {
   Send,
   Mail,
@@ -67,6 +68,17 @@ export const Contact: React.FC = () => {
           <p className="text-slate-400 text-sm sm:text-base">
             Have a project in mind, an opportunity, or a question? Send me a direct message!
           </p>
+
+          <HeaderScrollingLine
+            speed="fast"
+            items={[
+              '✦ OPEN FOR SOFTWARE ENGINEERING ROLES',
+              '✦ RSANTHOSH8294@GMAIL.COM',
+              '✦ +91 82483 31802',
+              '✦ CHENNAI / THIRUVALLUR, TAMIL NADU',
+              '✦ BWM-SMOKY.VERCEL.APP',
+            ]}
+          />
         </div>
 
         {/* Contact Grid */}

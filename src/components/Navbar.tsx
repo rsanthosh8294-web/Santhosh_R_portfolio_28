@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { usePortfolio } from '../context/PortfolioContext';
+import { usePortfolio, ThemeMode } from '../context/PortfolioContext';
 import { soundFx } from '../utils/audio';
+import { HeaderScrollingLine } from './HeaderScrollingLine';
 import {
   Code2,
   Menu,
@@ -12,7 +13,12 @@ import {
   Sparkles,
   Github,
   Mail,
-  Sliders
+  Sliders,
+  Palette,
+  Sun,
+  Moon,
+  Zap,
+  Check
 } from 'lucide-react';
 
 interface Props {
@@ -30,10 +36,11 @@ export const Navbar: React.FC<Props> = ({
   onOpenVsCodeModal,
   onOpenVercelModal,
 }) => {
-  const { personalInfo, openEditor } = usePortfolio();
+  const { personalInfo, openEditor, themeMode, setThemeMode, toggleThemeMode } = usePortfolio();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(soundFx.enabled);
+  const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,11 +85,26 @@ export const Navbar: React.FC<Props> = ({
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'py-3 bg-slate-950/80 backdrop-blur-xl border-b border-sky-500/10 shadow-lg shadow-black/40'
-          : 'py-5 bg-transparent'
+          ? 'py-2 bg-slate-950/90 backdrop-blur-xl border-b border-sky-500/10 shadow-lg shadow-black/40'
+          : 'py-3 bg-slate-950/40 backdrop-blur-md border-b border-slate-800/40'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Top Header Scrolling Marquee Line */}
+      <HeaderScrollingLine
+        speed="fast"
+        showLaserUnderline={false}
+        className="my-0 py-0 text-[10px] bg-slate-950/80 border-b border-slate-800/60"
+        items={[
+          '✦ SANTHOSH R — FULL STACK PORTFOLIO',
+          '✦ B.E. COMPUTER SCIENCE & ENGINEERING',
+          '✦ CGPA 8.01 • ANNA UNIVERSITY',
+          '✦ INSTANT UPLOAD PROJECT GALLERY',
+          '✦ LIVE AT BWM-SMOKY.VERCEL.APP',
+          '✦ REACT 18 • THREE.JS • TAILWIND',
+        ]}
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <a
@@ -139,6 +161,57 @@ export const Navbar: React.FC<Props> = ({
 
           {/* Action Buttons */}
           <div className="hidden sm:flex items-center gap-2.5">
+            {/* Global Theme Mode Switcher Popover */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  soundFx.playClick();
+                  setIsThemeMenuOpen(!isThemeMenuOpen);
+                }}
+                onMouseEnter={() => soundFx.playHover()}
+                className="px-3 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-slate-200 transition-all flex items-center gap-1.5 text-xs font-semibold shadow-sm"
+                title="Switch Theme Mode"
+              >
+                <Palette className="w-3.5 h-3.5 text-purple-400 animate-spin-slow" />
+                <span className="capitalize">{themeMode} Theme</span>
+              </button>
+
+              {/* Theme Dropdown Menu */}
+              {isThemeMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 p-2 rounded-2xl bg-slate-900/95 border border-slate-800 shadow-2xl backdrop-blur-xl z-50 animate-fadeIn space-y-1">
+                  <div className="px-2 py-1 text-[10px] font-mono text-slate-400 uppercase tracking-wider">
+                    Select 3D Particle Theme
+                  </div>
+                  {[
+                    { id: 'cyber', label: 'Cyberpunk Blue', color: 'bg-sky-500' },
+                    { id: 'emerald', label: 'Emerald Matrix', color: 'bg-emerald-500' },
+                    { id: 'sunset', label: 'Sunset Violet', color: 'bg-pink-500' },
+                    { id: 'light', label: 'Clean Light Glass', color: 'bg-slate-200' },
+                  ].map((t) => (
+                    <button
+                      key={t.id}
+                      onClick={() => {
+                        soundFx.playClick();
+                        setThemeMode(t.id as ThemeMode);
+                        setIsThemeMenuOpen(false);
+                      }}
+                      className={`w-full px-2.5 py-2 rounded-xl text-xs font-medium flex items-center justify-between transition-all ${
+                        themeMode === t.id
+                          ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
+                          : 'text-slate-300 hover:bg-slate-800'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className={`w-2.5 h-2.5 rounded-full ${t.color}`} />
+                        <span>{t.label}</span>
+                      </div>
+                      {themeMode === t.id && <Check className="w-3.5 h-3.5 text-purple-400" />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {/* Edit Portfolio Details Trigger */}
             <button
               onClick={() => {
@@ -246,12 +319,39 @@ export const Navbar: React.FC<Props> = ({
             ))}
 
             <div className="pt-3 mt-2 border-t border-slate-800/80 flex flex-col gap-2.5">
+              <div className="flex flex-col gap-1.5">
+                <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">3D Particle Theme:</span>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { id: 'cyber', label: 'Cyber' },
+                    { id: 'emerald', label: 'Emerald' },
+                    { id: 'sunset', label: 'Sunset' },
+                    { id: 'light', label: 'Light' },
+                  ].map((t) => (
+                    <button
+                      key={t.id}
+                      onClick={() => {
+                        soundFx.playClick();
+                        setThemeMode(t.id as ThemeMode);
+                      }}
+                      className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all ${
+                        themeMode === t.id
+                          ? 'bg-purple-600/30 text-purple-200 border-purple-500/50'
+                          : 'bg-slate-900 text-slate-400 border-slate-800'
+                      }`}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onOpenResumeModal();
                 }}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-semibold text-center flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-semibold text-center flex items-center justify-center gap-2 mt-2"
               >
                 <FileText className="w-4 h-4" />
                 <span>View & Download Resume</span>

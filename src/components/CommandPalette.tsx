@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { usePortfolio } from '../context/PortfolioContext';
+import { usePortfolio, ThemeMode } from '../context/PortfolioContext';
 import { soundFx } from '../utils/audio';
 import {
   Search,
@@ -13,7 +13,8 @@ import {
   Calculator,
   FileText,
   Volume2,
-  Sliders
+  Sliders,
+  Palette
 } from 'lucide-react';
 
 interface Props {
@@ -31,7 +32,7 @@ export const CommandPalette: React.FC<Props> = ({
   onOpenResumeModal,
   onOpenVsCodeModal
 }) => {
-  const { openEditor } = usePortfolio();
+  const { openEditor, toggleThemeMode, setThemeMode } = usePortfolio();
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -55,6 +56,56 @@ export const CommandPalette: React.FC<Props> = ({
   if (!isOpen) return null;
 
   const commands = [
+    {
+      id: 'theme-toggle',
+      title: 'Cycle Next Theme Mode (Cyber -> Emerald -> Sunset -> Light)',
+      category: 'Visual Theme',
+      icon: <Palette className="w-4 h-4 text-purple-400" />,
+      action: () => {
+        toggleThemeMode();
+        onClose();
+      }
+    },
+    {
+      id: 'theme-cyber',
+      title: 'Switch to Cyberpunk Blue Theme',
+      category: 'Visual Theme',
+      icon: <Palette className="w-4 h-4 text-sky-400" />,
+      action: () => {
+        setThemeMode('cyber');
+        onClose();
+      }
+    },
+    {
+      id: 'theme-emerald',
+      title: 'Switch to Emerald Matrix Theme',
+      category: 'Visual Theme',
+      icon: <Palette className="w-4 h-4 text-emerald-400" />,
+      action: () => {
+        setThemeMode('emerald');
+        onClose();
+      }
+    },
+    {
+      id: 'theme-sunset',
+      title: 'Switch to Sunset Violet Theme',
+      category: 'Visual Theme',
+      icon: <Palette className="w-4 h-4 text-pink-400" />,
+      action: () => {
+        setThemeMode('sunset');
+        onClose();
+      }
+    },
+    {
+      id: 'theme-light',
+      title: 'Switch to Clean Light Glass Theme',
+      category: 'Visual Theme',
+      icon: <Palette className="w-4 h-4 text-slate-300" />,
+      action: () => {
+        setThemeMode('light');
+        onClose();
+      }
+    },
     {
       id: 'vscode-access',
       title: 'VS Code Access & Code Export (Copy Details & Commands)',

@@ -3,6 +3,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import { soundFx } from '../utils/audio';
 import santhoshAvatarImg from '../assets/images/santhosh_developer_id_photo_1784902447117.jpg';
 import { CopyButton } from './CopyButton';
+import { HeaderScrollingLine } from './HeaderScrollingLine';
 import {
   ArrowRight,
   Code,
@@ -139,6 +140,17 @@ export const Hero: React.FC<Props> = ({ onOpenResumeModal }) => {
               <Terminal className="w-6 h-6 text-indigo-400 shrink-0" />
               <span>{personalInfo.role}</span>
             </h2>
+
+            <HeaderScrollingLine
+              speed="fast"
+              items={[
+                '✦ B.E. CSE GRADUATE (CGPA 8.01)',
+                '✦ REACT 18 & THREE.JS ARCHITECT',
+                '✦ INSTANT PROJECT IMAGE UPLOADER',
+                '✦ BWM-SMOKY.VERCEL.APP PORTFOLIO',
+                '✦ OPEN FOR IMMEDIATE OPPORTUNITIES',
+              ]}
+            />
           </div>
 
           {/* Tagline */}
@@ -207,7 +219,7 @@ export const Hero: React.FC<Props> = ({ onOpenResumeModal }) => {
               className="w-full sm:w-auto px-5 py-3.5 rounded-2xl font-mono text-xs text-sky-400 bg-sky-950/40 hover:bg-sky-900/50 border border-sky-800/60 transition-all duration-200 flex items-center justify-center gap-1.5"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>Get Resume</span>
+              <span>A4 Interview Resume</span>
             </button>
           </div>
 

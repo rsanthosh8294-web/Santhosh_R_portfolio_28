@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { soundFx } from '../utils/audio';
+import { HeaderScrollingLine } from './HeaderScrollingLine';
 import {
   Cpu,
   Code2,
@@ -83,6 +84,18 @@ export const Skills: React.FC = () => {
           <p className="text-slate-400 text-sm sm:text-base">
             Languages, frameworks, database systems, and developer tools I build with.
           </p>
+
+          <HeaderScrollingLine
+            reverse
+            items={[
+              '✦ REACT 18 & JAVASCRIPT ES6+',
+              '✦ THREE.JS & WEBGL SHADERS',
+              '✦ TAILWIND CSS & SHADCN UI',
+              '✦ NODE.JS & EXPRESS BACKEND',
+              '✦ PYTHON & SQL DATABASES',
+              '✦ GIT & VERCEL DEPLOYMENT',
+            ]}
+          />
         </div>
 
         {/* Category Filters */}

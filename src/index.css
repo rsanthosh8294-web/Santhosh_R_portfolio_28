@@ -2,13 +2,21 @@
 
 @layer base {
   :root {
-    --bg-dark: #050505;
-    --card-bg: rgba(255, 255, 255, 0.03);
-    --border-glow: rgba(59, 130, 246, 0.25);
+    --bg-dark: #0a0d14;
+    --card-bg: rgba(15, 23, 42, 0.6);
+    --border-glow: rgba(56, 189, 248, 0.3);
     --accent-blue: #3b82f6;
     --accent-purple: #a855f7;
     --accent-emerald: #10b981;
     --f-sans: 'Helvetica Neue', system-ui, -apple-system, sans-serif;
+  }
+
+  /* Smooth Theme Morphing Transition */
+  html, body, .glass-panel, .glass-card, .glass-panel-glow, header, nav, main, section, footer {
+    transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   body {
@@ -18,6 +26,68 @@
     overflow-x: hidden;
     scroll-behavior: smooth;
   }
+}
+
+/* Theme Presets Styling */
+[data-theme="cyber"] {
+  --bg-dark: #0a0d14;
+}
+
+[data-theme="emerald"] {
+  --bg-dark: #04120e;
+}
+
+[data-theme="sunset"] {
+  --bg-dark: #12091c;
+}
+
+[data-theme="light"] {
+  --bg-dark: #f8fafc;
+}
+
+[data-theme="light"] body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .glass-panel,
+[data-theme="light"] .glass-card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(203, 213, 225, 0.8) !important;
+  box-shadow: 0 10px 30px -10px rgba(148, 163, 184, 0.35) !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .text-slate-100,
+[data-theme="light"] .text-slate-200,
+[data-theme="light"] .text-slate-300 {
+  color: #1e293b !important;
+}
+
+[data-theme="light"] .text-slate-400 {
+  color: #64748b !important;
+}
+
+[data-theme="emerald"] body {
+  background-color: #04120e !important;
+}
+
+[data-theme="emerald"] .glass-panel,
+[data-theme="emerald"] .glass-card {
+  background: rgba(6, 30, 22, 0.65) !important;
+  border-color: rgba(16, 185, 129, 0.25) !important;
+  box-shadow: 0 12px 32px 0 rgba(4, 18, 14, 0.6) !important;
+}
+
+[data-theme="sunset"] body {
+  background-color: #12091c !important;
+}
+
+[data-theme="sunset"] .glass-panel,
+[data-theme="sunset"] .glass-card {
+  background: rgba(30, 15, 45, 0.65) !important;
+  border-color: rgba(236, 72, 153, 0.25) !important;
+  box-shadow: 0 12px 32px 0 rgba(18, 9, 28, 0.6) !important;
 }
 
 /* Custom Editorial Scrollbar */
@@ -128,6 +198,59 @@
   -webkit-text-fill-color: transparent;
 }
 
+/* Infinite Marquee Ticker & Scrolling Header Line Animations */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marqueeReverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
+@keyframes laserScroll {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
+
+.animate-marquee-fast {
+  display: flex;
+  width: max-content;
+  animation: marquee 16s linear infinite;
+}
+
+.animate-marquee-reverse {
+  display: flex;
+  width: max-content;
+  animation: marqueeReverse 22s linear infinite;
+}
+
+.animate-marquee:hover,
+.animate-marquee-fast:hover,
+.animate-marquee-reverse:hover {
+  animation-play-state: paused;
+}
+
+.scrolling-header-laser {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(56, 189, 248, 0.2) 20%,
+    rgba(168, 85, 247, 0.9) 50%,
+    rgba(56, 189, 248, 0.2) 80%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: laserScroll 3s linear infinite;
+}
+
 /* Floating animation */
 @keyframes floatSlow {
   0%, 100% {
@@ -160,3 +283,41 @@
 .animate-pulse-glow {
   animation: pulseGlow 4s ease-in-out infinite;
 }
+
+/* Print Styles for Single Page A4 Resume */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 6mm 8mm 6mm 8mm;
+  }
+
+  body {
+    background: white !important;
+    color: #0f172a !important;
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .no-print,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .a4-print-target {
+    width: 100% !important;
+    max-width: 210mm !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: white !important;
+    color: #0f172a !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+

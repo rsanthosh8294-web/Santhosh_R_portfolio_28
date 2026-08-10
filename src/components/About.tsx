@@ -2,6 +2,7 @@ import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { soundFx } from '../utils/audio';
 import { CopyButton } from './CopyButton';
+import { HeaderScrollingLine } from './HeaderScrollingLine';
 import {
   UserCheck,
   Brain,
@@ -56,6 +57,17 @@ export const About: React.FC<Props> = ({ onOpenResumeModal }) => {
           <p className="text-slate-400 text-sm sm:text-base">
             Get to know my academic background, technical mindset, and core developer soft skills.
           </p>
+
+          <HeaderScrollingLine
+            speed="fast"
+            items={[
+              '✦ B.E. COMPUTER SCIENCE & ENGINEERING',
+              '✦ CGPA 8.01 • ANNA UNIVERSITY AFFILIATED',
+              '✦ PROBLEM SOLVING & ADAPTABILITY',
+              '✦ FULL STACK WEB ARCHITECTURE',
+              '✦ CREATIVE UI & 3D GRAPHICS',
+            ]}
+          />
         </div>
 
         {/* Top Grid: Bio Card + Quick Details */}
@@ -107,7 +119,7 @@ export const About: React.FC<Props> = ({ onOpenResumeModal }) => {
             <div className="pt-6 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-4">
               <div>
                 <p className="text-xs font-mono text-slate-400">Interested in my full profile?</p>
-                <p className="text-sm font-semibold text-slate-200">Download formatted resume PDF/Doc</p>
+                <p className="text-sm font-semibold text-slate-200">Download A4 Interview Resume (1 Page)</p>
               </div>
 
               <button
@@ -119,7 +131,7 @@ export const About: React.FC<Props> = ({ onOpenResumeModal }) => {
                 className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-slate-950 bg-gradient-to-r from-sky-400 via-indigo-300 to-purple-400 hover:opacity-90 shadow-md shadow-sky-400/20 transition-all duration-300"
               >
                 <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
-                <span>Download Resume</span>
+                <span>Download A4 Resume</span>
               </button>
             </div>
           </div>

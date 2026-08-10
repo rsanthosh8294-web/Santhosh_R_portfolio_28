@@ -3,6 +3,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import { soundFx } from '../utils/audio';
 import { Certification } from '../types';
 import { CertificateModal } from './CertificateModal';
+import { HeaderScrollingLine } from './HeaderScrollingLine';
 import {
   GraduationCap,
   Calendar,
@@ -23,6 +24,12 @@ export const Experience: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCert, setSelectedCert] = useState<Certification | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3500);
+  };
 
   const handleOpenImportModal = () => {
     soundFx.playClick();
@@ -43,16 +50,85 @@ export const Experience: React.FC = () => {
       const copy = [...certifications];
       copy[selectedIndex] = updatedCert;
       updateCertifications(copy);
+      showToast(`Certificate "${updatedCert.title}" updated successfully!`);
     } else {
       updateCertifications([...certifications, updatedCert]);
+      showToast(`New Certificate "${updatedCert.title}" added to portfolio!`);
     }
   };
 
   const handleImportNewCertificates = (newCerts: Certification[]) => {
     updateCertifications([...certifications, ...newCerts]);
+    showToast(`${newCerts.length} certificate file(s) imported successfully!`);
+  };
+
+  const handleDirectCardUpload = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      if (result) {
+        const copy = [...certifications];
+        copy[index] = {
+          ...copy[index],
+          fileUrl: result,
+          fileName: file.name,
+          fileType: file.type || (file.name.endsWith('.pdf') ? 'application/pdf' : 'image/png'),
+        };
+        updateCertifications(copy);
+        soundFx.playSuccess();
+        showToast(`Certificate file "${file.name}" attached successfully!`);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDirectTopBatchUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    soundFx.playClick();
+    const fileList = Array.from(files);
+    const newCerts: Certification[] = [];
+    let count = 0;
+
+    fileList.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const result = evt.target?.result as string;
+        const cleanName = file.name.replace(/\.[^/.]+$/, '');
+        newCerts.push({
+          title: cleanName,
+          issuer: 'Uploaded Certification',
+          date: new Date().getFullYear().toString(),
+          skills: ['Verified Credential'],
+          fileUrl: result,
+          fileName: file.name,
+          fileType: file.type || (file.name.endsWith('.pdf') ? 'application/pdf' : 'image/png'),
+        });
+
+        count++;
+        if (count === fileList.length) {
+          soundFx.playSuccess();
+          updateCertifications([...certifications, ...newCerts]);
+          showToast(`Successfully uploaded ${fileList.length} certificate file(s)!`);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
   };
   return (
     <section id="experience" className="py-24 px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-2xl bg-slate-900/95 border border-purple-500/50 text-purple-200 shadow-2xl backdrop-blur-xl flex items-center gap-3 animate-bounce">
+          <CheckCircle2 className="w-5 h-5 text-purple-400 shrink-0" />
+          <span className="text-xs font-semibold">{toastMessage}</span>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto space-y-16">
         
         {/* Section Header */}
@@ -68,6 +144,16 @@ export const Experience: React.FC = () => {
           <p className="text-slate-400 text-sm sm:text-base">
             Academic milestones and technical learning accomplishments.
           </p>
+
+          <HeaderScrollingLine
+            items={[
+              '✦ B.E. CSE • 2021 - 2025',
+              '✦ CGPA 8.01 FIRST CLASS',
+              '✦ INSTANT FILE & CERTIFICATE UPLOAD',
+              '✦ VERIFIED CREDENTIALS GALLERY',
+              '✦ BWM-SMOKY.VERCEL.APP',
+            ]}
+          />
         </div>
 
         {/* 3D Vertical Timeline Grid */}
@@ -83,7 +169,7 @@ export const Experience: React.FC = () => {
             {/* Vertical Glow Line */}
             <div className="absolute left-6 top-16 bottom-6 w-0.5 bg-gradient-to-b from-sky-500 via-indigo-500 to-purple-500/20" />
 
-            {educationHistory.map((edu, index) => (
+            {educationHistory.map((edu) => (
               <div
                 key={edu.degree}
                 onMouseEnter={() => soundFx.playHover()}
@@ -139,16 +225,31 @@ export const Experience: React.FC = () => {
             <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
               <h3 className="text-2xl font-bold text-white flex items-center gap-2">
                 <Award className="w-5 h-5 text-purple-400" />
-                <span>Certifications & Badges</span>
+                <span>Certifications & Credentials</span>
               </h3>
 
-              <button
-                onClick={handleOpenImportModal}
-                className="px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-300 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm shadow-purple-500/10"
-              >
-                <Upload className="w-3.5 h-3.5" />
-                <span>Import Certificate File</span>
-              </button>
+              <div className="flex items-center gap-2">
+                {/* Instant Top Batch File Upload */}
+                <label className="px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/40 text-purple-300 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer hover:scale-105">
+                  <Upload className="w-3.5 h-3.5 text-purple-400" />
+                  <span>Upload Files / Certs</span>
+                  <input
+                    type="file"
+                    accept="image/*,.pdf"
+                    multiple
+                    onChange={handleDirectTopBatchUpload}
+                    className="hidden"
+                  />
+                </label>
+
+                <button
+                  onClick={handleOpenImportModal}
+                  className="px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-medium transition-all"
+                  title="Open Form / Details Modal"
+                >
+                  <span>Modal</span>
+                </button>
+              </div>
             </div>
 
             <div className="space-y-4">
@@ -195,17 +296,30 @@ export const Experience: React.FC = () => {
                     ))}
                   </div>
 
-                  {/* Actions Row: View / Download / Upload Certificate File */}
-                  <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                  {/* Actions Row: View / Download / Direct File Upload */}
+                  <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-2 flex-wrap">
                     {cert.fileUrl ? (
-                      <div className="flex items-center gap-2 w-full justify-between">
-                        <button
-                          onClick={() => handleOpenCertModal(cert, idx)}
-                          className="px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-300 text-xs font-semibold flex items-center gap-1.5 transition-colors"
-                        >
-                          <Eye className="w-3.5 h-3.5 text-purple-400" />
-                          <span>View Certificate File</span>
-                        </button>
+                      <div className="flex items-center gap-2 w-full justify-between flex-wrap">
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            onClick={() => handleOpenCertModal(cert, idx)}
+                            className="px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-300 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                          >
+                            <Eye className="w-3.5 h-3.5 text-purple-400" />
+                            <span>View</span>
+                          </button>
+
+                          <label className="px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors">
+                            <Upload className="w-3.5 h-3.5 text-sky-400" />
+                            <span>Replace File</span>
+                            <input
+                              type="file"
+                              accept="image/*,.pdf"
+                              onChange={(e) => handleDirectCardUpload(idx, e)}
+                              className="hidden"
+                            />
+                          </label>
+                        </div>
 
                         <a
                           href={cert.fileUrl}
@@ -214,18 +328,21 @@ export const Experience: React.FC = () => {
                           className="px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1 transition-colors"
                           title="Download Certificate File"
                         >
-                          <Download className="w-3.5 h-3.5 text-sky-400" />
+                          <Download className="w-3.5 h-3.5 text-emerald-400" />
                           <span>Download</span>
                         </a>
                       </div>
                     ) : (
-                      <button
-                        onClick={() => handleOpenCertModal(cert, idx)}
-                        className="w-full py-1.5 px-3 rounded-xl bg-slate-900 hover:bg-purple-950/40 border border-slate-800 hover:border-purple-500/30 text-slate-400 hover:text-purple-300 text-xs font-medium flex items-center justify-center gap-1.5 transition-all"
-                      >
-                        <Upload className="w-3.5 h-3.5 text-slate-500 group-hover:text-purple-400" />
-                        <span>Attach Certificate File (PDF / Image)</span>
-                      </button>
+                      <label className="w-full py-2 px-3 rounded-xl bg-purple-950/30 hover:bg-purple-900/40 border border-purple-500/30 hover:border-purple-400 text-purple-300 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all shadow-sm">
+                        <Upload className="w-4 h-4 text-purple-400" />
+                        <span>Upload Certificate File (PDF / Image)</span>
+                        <input
+                          type="file"
+                          accept="image/*,.pdf"
+                          onChange={(e) => handleDirectCardUpload(idx, e)}
+                          className="hidden"
+                        />
+                      </label>
                     )}
                   </div>
                 </div>

@@ -11,6 +11,7 @@ import {
 import { Project, Skill, ToolItem, EducationItem, SoftSkill, Certification } from '../types';
 
 export type PersonalInfoType = typeof PERSONAL_INFO;
+export type ThemeMode = 'cyber' | 'emerald' | 'sunset' | 'light';
 
 interface PortfolioContextType {
   personalInfo: PersonalInfoType;
@@ -20,6 +21,9 @@ interface PortfolioContextType {
   projects: Project[];
   educationHistory: EducationItem[];
   certifications: Certification[];
+  themeMode: ThemeMode;
+  setThemeMode: (mode: ThemeMode) => void;
+  toggleThemeMode: () => void;
   isEditorOpen: boolean;
   openEditor: () => void;
   closeEditor: () => void;
@@ -46,11 +50,37 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [projects, setProjects] = useState<Project[]>(PROJECTS);
   const [educationHistory, setEducationHistory] = useState<EducationItem[]>(EDUCATION_HISTORY);
   const [certifications, setCertifications] = useState<Certification[]>(CERTIFICATIONS);
+  const [themeMode, setThemeModeState] = useState<ThemeMode>('cyber');
   const [isEditorOpen, setIsEditorOpen] = useState(false);
+
+  // Sync theme attribute on document root whenever themeMode changes
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', themeMode);
+  }, [themeMode]);
+
+  const setThemeMode = (mode: ThemeMode) => {
+    setThemeModeState(mode);
+    try {
+      localStorage.setItem('santhosh_portfolio_theme_v1', mode);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const toggleThemeMode = () => {
+    const modes: ThemeMode[] = ['cyber', 'emerald', 'sunset', 'light'];
+    const currentIndex = modes.indexOf(themeMode);
+    const nextMode = modes[(currentIndex + 1) % modes.length];
+    setThemeMode(nextMode);
+  };
 
   // Load saved data from localStorage on mount
   useEffect(() => {
     try {
+      const savedTheme = localStorage.getItem('santhosh_portfolio_theme_v1') as ThemeMode;
+      if (savedTheme && ['cyber', 'emerald', 'sunset', 'light'].includes(savedTheme)) {
+        setThemeModeState(savedTheme);
+      }
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
@@ -203,6 +233,9 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         projects,
         educationHistory,
         certifications,
+        themeMode,
+        setThemeMode,
+        toggleThemeMode,
         isEditorOpen,
         openEditor: () => setIsEditorOpen(true),
         closeEditor: () => setIsEditorOpen(false),
