@@ -1,0 +1,29 @@
+/* Santhosh R - Personal Portfolio Stylesheet */
+@import "./src/index.css";
+
+:root {
+  --primary-glow: #38bdf8;
+  --accent-purple: #a855f7;
+  --bg-dark: #0a0d14;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-dark);
+  color: #f1f5f9;
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Glassmorphism Cards */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateY(-5px);
+}

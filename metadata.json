@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Santhosh R Portfolio",
+  "description": "Futuristic 3D animated personal portfolio website for Santhosh R, Full Stack \u0026 Web Developer.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
