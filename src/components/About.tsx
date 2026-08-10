@@ -2,7 +2,6 @@ import React from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { soundFx } from '../utils/audio';
 import { CopyButton } from './CopyButton';
-import { HeaderScrollingLine } from './HeaderScrollingLine';
 import {
   UserCheck,
   Brain,
@@ -57,17 +56,6 @@ export const About: React.FC<Props> = ({ onOpenResumeModal }) => {
           <p className="text-slate-400 text-sm sm:text-base">
             Get to know my academic background, technical mindset, and core developer soft skills.
           </p>
-
-          <HeaderScrollingLine
-            speed="fast"
-            items={[
-              '✦ B.E. COMPUTER SCIENCE & ENGINEERING',
-              '✦ CGPA 8.01 • ANNA UNIVERSITY AFFILIATED',
-              '✦ PROBLEM SOLVING & ADAPTABILITY',
-              '✦ FULL STACK WEB ARCHITECTURE',
-              '✦ CREATIVE UI & 3D GRAPHICS',
-            ]}
-          />
         </div>
 
         {/* Top Grid: Bio Card + Quick Details */}

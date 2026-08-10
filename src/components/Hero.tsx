@@ -3,7 +3,6 @@ import { usePortfolio } from '../context/PortfolioContext';
 import { soundFx } from '../utils/audio';
 import santhoshAvatarImg from '../assets/images/santhosh_developer_id_photo_1784902447117.jpg';
 import { CopyButton } from './CopyButton';
-import { HeaderScrollingLine } from './HeaderScrollingLine';
 import {
   ArrowRight,
   Code,
@@ -140,17 +139,6 @@ export const Hero: React.FC<Props> = ({ onOpenResumeModal }) => {
               <Terminal className="w-6 h-6 text-indigo-400 shrink-0" />
               <span>{personalInfo.role}</span>
             </h2>
-
-            <HeaderScrollingLine
-              speed="fast"
-              items={[
-                '✦ B.E. CSE GRADUATE (CGPA 8.01)',
-                '✦ REACT 18 & THREE.JS ARCHITECT',
-                '✦ INSTANT PROJECT IMAGE UPLOADER',
-                '✦ BWM-SMOKY.VERCEL.APP PORTFOLIO',
-                '✦ OPEN FOR IMMEDIATE OPPORTUNITIES',
-              ]}
-            />
           </div>
 
           {/* Tagline */}

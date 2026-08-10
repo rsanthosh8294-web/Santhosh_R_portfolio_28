@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import { Project } from '../types';
 import { soundFx } from '../utils/audio';
-import { HeaderScrollingLine } from './HeaderScrollingLine';
 import {
   FolderGit2,
   ExternalLink,
@@ -95,17 +94,6 @@ export const Projects: React.FC<Props> = ({ onOpenCgpaCalculator }) => {
           <p className="text-slate-400 text-sm sm:text-base">
             Explore web applications, academic tools, and interactive digital experiences.
           </p>
-
-          {/* Scrolling Ticker Line for Header */}
-          <HeaderScrollingLine
-            items={[
-              '✦ FEATURED PROJECTS & WEB APPS',
-              '✦ INSTANT IMAGE UPLOAD READY',
-              '✦ REACT 18 & THREE.JS CANVAS',
-              '✦ BWM-SMOKY.VERCEL.APP',
-              '✦ REAL-TIME PORTFOLIO UPDATE',
-            ]}
-          />
         </div>
 
         {/* Filter Tabs & Quick Add Action */}

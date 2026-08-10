@@ -3,7 +3,6 @@ import { usePortfolio } from '../context/PortfolioContext';
 import { soundFx } from '../utils/audio';
 import { Certification } from '../types';
 import { CertificateModal } from './CertificateModal';
-import { HeaderScrollingLine } from './HeaderScrollingLine';
 import {
   GraduationCap,
   Calendar,
@@ -144,16 +143,6 @@ export const Experience: React.FC = () => {
           <p className="text-slate-400 text-sm sm:text-base">
             Academic milestones and technical learning accomplishments.
           </p>
-
-          <HeaderScrollingLine
-            items={[
-              '✦ B.E. CSE • 2021 - 2025',
-              '✦ CGPA 8.01 FIRST CLASS',
-              '✦ INSTANT FILE & CERTIFICATE UPLOAD',
-              '✦ VERIFIED CREDENTIALS GALLERY',
-              '✦ BWM-SMOKY.VERCEL.APP',
-            ]}
-          />
         </div>
 
         {/* 3D Vertical Timeline Grid */}
